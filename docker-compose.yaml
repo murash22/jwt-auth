@@ -1,0 +1,28 @@
+
+services:
+  app:
+    hostname: ${SERVER_HOSTNAME}
+    container_name: app_container
+    build: .
+    restart: always
+    ports:
+      - "${SERVER_OUTER_PORT}:${SERVER_INNER_PORT}"
+    depends_on:
+      - db
+    networks:
+      - my_net
+
+  db:
+    image: postgres
+    restart: always
+    hostname: ${DB_HOST}
+    env_file: .env
+    ports:
+      - "5433:${DB_PORT}"
+    networks:
+      - my_net
+
+
+networks:
+  my_net:
+    driver: bridge
