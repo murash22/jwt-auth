@@ -1,13 +1,15 @@
 package http_server
 
 import (
+	_ "auth_service/docs"
 	"auth_service/internal/config"
 	"auth_service/internal/http-server/handlers"
+	"auth_service/internal/http-server/middlewares"
 	"auth_service/internal/service"
 	"context"
 	"fmt"
+	httpSwagger "github.com/swaggo/http-swagger/v2"
 	"log/slog"
-	"net"
 	"net/http"
 )
 
@@ -31,8 +33,14 @@ func (s *server) initRoutes(logger *slog.Logger, services *service.Services) {
 		logger, services.AuthService, s.cfg.CookiesTTLHours,
 	))
 	s.router.Handle("POST /auth/refresh", handlers.NewAuthRefreshHandler(
-		logger, services.AuthService, services.EmailService, s.cfg.CookiesTTLHours,
+		logger, services.AuthService, s.cfg.CookiesTTLHours,
 	))
+
+	authMw := middlewares.NewAuthMiddleware(logger, []byte(s.cfg.JwtSecret))
+	s.router.HandleFunc("GET /auth/me", authMw(handlers.NewGetGuidHandler(logger)))
+	s.router.HandleFunc("POST /auth/logout", authMw(handlers.NewLogoutHandler(logger, services.AuthService)))
+
+	s.router.Handle("/swagger/", httpSwagger.WrapHandler)
 }
 
 func (s *server) Shutdown(ctx context.Context) error {
@@ -41,11 +49,8 @@ func (s *server) Shutdown(ctx context.Context) error {
 
 func (s *server) Run(ctx context.Context) error {
 	s.srv = &http.Server{
-		Addr:    fmt.Sprintf("%s:%s", s.cfg.Server.Host, s.cfg.Server.Port),
+		Addr:    fmt.Sprintf("%s:8080", s.cfg.Server.Host),
 		Handler: s.router,
-		BaseContext: func(_ net.Listener) context.Context {
-			return ctx
-		},
 	}
 
 	return s.srv.ListenAndServe()

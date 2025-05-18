@@ -7,13 +7,11 @@ import (
 )
 
 type Services struct {
-	AuthService  *authService
-	EmailService *emailService
+	AuthService *authService
 }
 
 func NewServices(logger *slog.Logger, cfg *config.Config, storage repo.Repo) *Services {
 	return &Services{
-		AuthService:  NewAuthService(logger, cfg, storage),
-		EmailService: NewEmailService(logger, cfg),
+		AuthService: NewAuthService(logger, cfg, storage),
 	}
 }

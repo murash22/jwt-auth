@@ -1,27 +1,32 @@
 package dto
 
+type TokensPair struct {
+	AccessToken  string `json:"access_token"`
+	RefreshToken string `json:"refresh_token"`
+}
+
 type GenerateTokensPairInput struct {
-	UserId string
-	Addr   string
+	UserId    string
+	Addr      string
+	UserAgent string
 }
 
 type GenerateTokensPairOutput struct {
-	AccessToken  string
-	RefreshToken string
+	TokensPair
 }
 
 type UpdateTokensInput struct {
+	AccessToken  string
 	RefreshToken string
 	Addr         string
+	UserAgent    string
 }
 
 type UpdateTokensOutput struct {
-	GenerateTokensPairOutput
-	OldRefreshTokenClaims JwtPayload
+	TokensPair
 }
 
 type JwtPayload struct {
 	Subject string
 	Exp     int64
-	Addr    string
 }

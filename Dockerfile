@@ -7,7 +7,7 @@ RUN go install github.com/pressly/goose/v3/cmd/goose@latest
 WORKDIR /app
 
 COPY go.mod ./
-ENV GOPROXY=https://proxy.golang.org,direct
+#ENV GOPROXY=https://proxy.golang.org,direct
 RUN go mod download
 
 COPY . .

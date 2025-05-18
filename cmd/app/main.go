@@ -17,6 +17,20 @@ import (
 	"syscall"
 )
 
+// @Title           JWT Authorization service
+// @Description     Simple authorization service
+
+// @Contact.name   Ashyr
+// @Contact.url    https://t.me/nommstr
+
+// @Host      localhost:8080
+// @BasePath  /
+// @Schemes http
+
+// @SecurityDefinitions.apiKey  BearerAuth
+// @In Header
+// @Name Authorization
+// @Description Authorization header with Bearer. For example: 'Bearer paste-here-your-token'
 func main() {
 	cfg := config.MustLoad(".env")
 	logger := lg.NewLogger(slog.LevelDebug)

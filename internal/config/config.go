@@ -12,6 +12,7 @@ type Config struct {
 	JwtAccessTTLMinutes int    `env:"JWT_ACCESS_TTL"`
 	JwtRefreshTTLHours  int    `env:"JWT_REFRESH_TTL"`
 	CookiesTTLHours     int    `env:"COOKIES_TTL"`
+	WebhookUrl          string `env:"WEBHOOK_URL"`
 }
 
 type Database struct {
@@ -23,7 +24,6 @@ type Database struct {
 
 type Server struct {
 	Host string `env:"SERVER_HOSTNAME"`
-	Port string `env:"SERVER_INNER_PORT"`
 }
 
 func MustLoad(configPath string) *Config {

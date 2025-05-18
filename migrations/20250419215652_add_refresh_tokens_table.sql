@@ -1,8 +1,12 @@
 -- +goose Up
 -- +goose StatementBegin
 CREATE TABLE IF NOT EXISTS refresh_tokens(
-    user_id UUID PRIMARY KEY NOT NULL,
-    token_hash TEXT NOT NULL,
+    uuid UUID PRIMARY KEY NOT NULL,
+    user_id UUID NOT NULL,
+    value TEXT NOT NULL,
+    ip_addr TEXT NOT NULL,
+    user_agent TEXT NOT NULL,
+    expires_at TIMESTAMP NOT NULL,
     created_at TIMESTAMP NOT NULL DEFAULT NOW() -- пока оставим поле
 );
 -- +goose StatementEnd
